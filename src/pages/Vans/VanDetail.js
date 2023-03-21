@@ -1,12 +1,14 @@
 import React from "react";
-import { useParams, } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
  //Params is a keyword that allows passing a variable number of parameters into a method.
 // useParams hook: returns an object of key/value pairs of the dynamic params from the current URL that where matched by the ''<Route path>. Child routes inherit all params from their parent routes.
 
 function VanDetail() {
 
     const params = useParams();
-    console.log(params);
+    const location = useLocation();
+    console.log(location);
+   /*  console.log(params); */
     const [van, setVan] = React.useState(null);
 
     React.useEffect(() => {
@@ -15,8 +17,18 @@ function VanDetail() {
         .then(data => setVan(data.vans))
     },[params.id]);
 
+    const search = location.state?.search || ""; /* Optional chaning! Normally location.state && location.state.search || "" */
+    const type = location.state?.type || "all";
+
     return(
         <div className="van-detail-continer">
+            <Link
+                to={`..${search}`}
+                relative="path"
+                className="back-button"
+            >&larr; <span>Back to {type} vans</span>
+            
+            </Link>
             {van ? (
                 <div className="van-detail">
                 <img src={van.imageUrl} alt="Van" />
